@@ -1,16 +1,22 @@
+require('dotenv').config()
+require('./mongo')
+
 const express = require('express')
 const cors = require('cors')
+const Note = require('./models/Note')
 
 const app = express()
 const port = process.env.PORT || 3001
 
+let notes = require('./dataMockup')
+
 app.use(cors())
 app.use(express.json())
 
-let notes = require('./dataMockup')
-
 app.get('/api/notes', (req, res) => {
-  res.json(notes)
+  Note.find({}).then(notes => {
+    res.json(notes)
+  })
 })
 
 app.get('/api/notes/:id', (req, res) => {
